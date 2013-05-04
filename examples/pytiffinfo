@@ -1,0 +1,106 @@
+#! /usr/bin/env python
+# -*- python -*-
+
+####################################################################################################
+# 
+# pylibtiff - A Python binding to libtiff 
+# Copyright (C) Salvaire Fabrice 2013 
+# 
+####################################################################################################
+
+####################################################################################################
+
+import argparse
+
+import LibTiff as Tiff
+
+####################################################################################################
+#
+# Options
+#
+
+argument_parser = argparse.ArgumentParser(description='Display TIFF info')
+
+argument_parser.add_argument('file_name', metavar='FILE.tif',
+                             help='TIFF file')
+
+args = argument_parser.parse_args()
+
+####################################################################################################
+
+tiff_tags = (
+    # segfault /!\
+    # 'TIFFTAG_ARTIST',
+    'TIFFTAG_BADFAXLINES',
+    'TIFFTAG_BITSPERSAMPLE',
+    'TIFFTAG_CLEANFAXDATA',
+    'TIFFTAG_COMPRESSION',
+    # 'TIFFTAG_CONSECUTIVEBADFAXLINES',
+    # 'TIFFTAG_COPYRIGHT',
+    # 'TIFFTAG_DATETIME',
+    # 'TIFFTAG_DOCUMENTNAME',
+    # 'TIFFTAG_FAXMODE',
+    'TIFFTAG_FILLORDER',
+    'TIFFTAG_GROUP3OPTIONS',
+    'TIFFTAG_GROUP4OPTIONS',
+    # 'TIFFTAG_HOSTCOMPUTER',
+    'TIFFTAG_IMAGEDEPTH',
+    'TIFFTAG_IMAGELENGTH',
+    'TIFFTAG_IMAGEWIDTH',
+    # 'TIFFTAG_INKNAMES',
+    'TIFFTAG_INKSET',
+    'TIFFTAG_JPEGCOLORMODE',
+    'TIFFTAG_JPEGQUALITY',
+    'TIFFTAG_JPEGTABLESMODE',
+    # 'TIFFTAG_MAKE',
+    # 'TIFFTAG_MATTEING',
+    'TIFFTAG_MAXSAMPLEVALUE',
+    'TIFFTAG_MINSAMPLEVALUE',
+    # 'TIFFTAG_MODEL',
+    'TIFFTAG_ORIENTATION',
+    # 'TIFFTAG_PAGENAME',
+    'TIFFTAG_PHOTOMETRIC',
+    'TIFFTAG_PLANARCONFIG',
+    # 'TIFFTAG_PREDICTOR', # segfault ???
+    'TIFFTAG_RESOLUTIONUNIT',
+    'TIFFTAG_ROWSPERSTRIP',
+    'TIFFTAG_SAMPLEFORMAT',
+    'TIFFTAG_SAMPLESPERPIXEL',
+    'TIFFTAG_SMAXSAMPLEVALUE',
+    'TIFFTAG_SMINSAMPLEVALUE',
+    'TIFFTAG_SOFTWARE',
+    'TIFFTAG_STONITS',
+    'TIFFTAG_SUBFILETYPE',
+    # 'TIFFTAG_TARGETPRINTER',
+    'TIFFTAG_THRESHHOLDING',
+    'TIFFTAG_TILEDEPTH',
+    'TIFFTAG_TILELENGTH',
+    'TIFFTAG_TILEWIDTH',
+    'TIFFTAG_XRESOLUTION',
+    'TIFFTAG_YCBCRPOSITIONING',
+    'TIFFTAG_YPOSITION',
+    'TIFFTAG_YRESOLUTION',
+
+    # 'TIFFTAG_IMAGEDESCRIPTION',
+    )
+
+tif = Tiff.TIFFOpen(args.file_name, 'r')
+
+print 'TIFF Tags for',  args.file_name
+for tag in tiff_tags:
+ function = getattr(Tiff, 'TIFFGetField_' + tag)
+ print '  %-30s' % tag, function(tif)
+
+line = '='*80
+print '  TIFFTAG_IMAGEDESCRIPTION:'
+print line
+print Tiff.TIFFGetField_TIFFTAG_IMAGEDESCRIPTION(tif)
+print line
+
+Tiff.TIFFClose(tif)
+
+####################################################################################################
+#
+# End
+#
+####################################################################################################
