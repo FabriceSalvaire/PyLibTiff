@@ -1,3 +1,5 @@
+**Unused and no longer maintained**
+
 ===================
 PyLibTiff V0.1.0
 ===================
